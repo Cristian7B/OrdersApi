@@ -7,17 +7,10 @@ from pydantic import BaseModel, Field
 
 app = FastAPI(title="Pedidos API", version="1.0.0")
 
-# ---------------------------------------------------------------------------
-# In-memory store
-# ---------------------------------------------------------------------------
 orders_db: list[dict] = []
 
 VALID_STATUSES = {"Pendiente", "En Proceso", "Enviado", "Entregado"}
 
-
-# ---------------------------------------------------------------------------
-# Schemas
-# ---------------------------------------------------------------------------
 class OrderCreate(BaseModel):
     customer_name: str = Field(..., min_length=1)
     products: list[str] = Field(..., min_items=1)
@@ -39,9 +32,6 @@ class OrderResponse(BaseModel):
     created_at: datetime
 
 
-# ---------------------------------------------------------------------------
-# Endpoints
-# ---------------------------------------------------------------------------
 @app.post("/orders", response_model=OrderResponse, status_code=201)
 def create_order(order: OrderCreate):
     """Create a new order with status 'Pendiente'."""
